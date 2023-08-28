@@ -1,0 +1,72 @@
+const readline = require('readline');
+
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+
+function add(a, b) {
+    return a + b;
+}
+
+function subtract(a, b) {
+    return a - b;
+}
+
+function multiply(a, b) {
+    return a * b;
+}
+
+function divide(a, b) {
+    if (b === 0) {
+        throw new Error("Cannot divide by zero");
+    }
+    return a / b;
+}
+
+function calculator() {
+    rl.question('Enter operation (+, -, *, /): ', (operation) => {
+        if (operation !== '+' && operation !== '-' && operation !== '*' && operation !== '/') {
+            console.log("Invalid operation");
+            rl.close();
+            return;
+        }
+
+        rl.question('Enter first number: ', (num1) => {
+            rl.question('Enter second number: ', (num2) => {
+                const num1Parsed = parseFloat(num1);
+                const num2Parsed = parseFloat(num2);
+
+                if (isNaN(num1Parsed) || isNaN(num2Parsed)) {
+                    console.log("Invalid numbers");
+                } else {
+                    let result;
+                    switch (operation) {
+                        case '+':
+                            result = add(num1Parsed, num2Parsed);
+                            break;
+                        case '-':
+                            result = subtract(num1Parsed, num2Parsed);
+                            break;
+                        case '*':
+                            result = multiply(num1Parsed, num2Parsed);
+                            break;
+                        case '/':
+                            try {
+                                result = divide(num1Parsed, num2Parsed);
+                            } catch (error) {
+                                console.log(error.message);
+                                rl.close();
+                                return;
+                            }
+                            break;
+                    }
+                    console.log(`Result: ${result}`);
+                }
+                rl.close();
+            });
+        });
+    });
+}
+
+calculator();
